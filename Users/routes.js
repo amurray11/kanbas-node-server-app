@@ -18,7 +18,7 @@ const findAllUsers = async (req, res) => {
   const updateUser = async (req, res) => {
     const { userId } = req.params;
     const status = await dao.updateUser(userId, req.body);
-    currentUser = await dao.findUserById(userId);
+    globalCurrentuser = await dao.findUserById(userId);
     res.json(status);
   };
 
@@ -48,6 +48,7 @@ const findAllUsers = async (req, res) => {
   };
   const signout = (req, res) => {
     req.session.destroy();
+    globalCurrentuser = undefined;
     res.sendStatus(200);
   };
 
@@ -67,8 +68,8 @@ const findAllUsers = async (req, res) => {
   app.get("/api/users/:userId", findUserById);
   app.put("/api/users/:userId", updateUser);
   app.delete("/api/users/:userId", deleteUser);
-  app.post("/api/users/signup", signup);
-  app.post("/api/users/signin", signin);
-  app.post("/api/users/signout", signout);
-  app.post("/api/users/profile", profile);
+  app.post("/signup", signup);
+  app.post("/signin", signin);
+  app.post("/signout", signout);
+  app.post("/profile", profile);
 }
